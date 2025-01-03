@@ -48,11 +48,35 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = (req, res) => {
-  res.send("server is login");
+export const login = async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    if (!username || !password) {
+      return res.status(400).json({ message: "Enter All the fields" });
+    }
+
+    const existUser = await User.findOne({ username });
+    if (!existUser) {
+      return res.status(400).json({ message: "User Not found. Please Login" });
+    }
+
+    const ispassword = await bcrypt.compare(password, existUser.password);
+    if (!ispassword) {
+      return res.status(401).json({ message: "Wrong Password" });
+    }
+
+    try {
+      await generateToken(existUser._id, res);
+      res.status(200).json({ message: "Login successfully" });
+    } catch (error) {
+      console.log(error);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 export const logout = (req, res) => {
   res.send("server is logout");
 };
-//1.15 hours
