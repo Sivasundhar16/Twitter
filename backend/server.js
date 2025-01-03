@@ -6,10 +6,11 @@ import authroute from "../backend/routes/auth.route.js";
 dotenv.config();
 
 const app = express();
+app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
-app.use("/api/auth", authroute);
+app.use("/auth", authroute);
 
 const connection = async () => {
   try {
