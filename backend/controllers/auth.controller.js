@@ -56,8 +56,9 @@ export const logout = (req, res) => {
   res.send("server is Logged Out");
 };
 //1.15 hours
-//git branch = all branch
-//git checkout (branch name)   switch branch
+//git branch (name)                for creating new branch
+//git branch                       show all branch
+//git checkout (branch name)       switch branch
 
 //master branch ku poi
-// git merge (brach name ) wanted mergin branch name
+// git merge (brach name )         wanted mergin branch name
