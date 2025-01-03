@@ -55,10 +55,14 @@ export const login = (req, res) => {
 export const logout = (req, res) => {
   res.send("server is Logged Out");
 };
-//1.15 hours
 //git branch (name)                for creating new branch
 //git branch                       show all branch
 //git checkout (branch name)       switch branch
 
 //master branch ku poi
 // git merge (brach name )         wanted mergin branch name
+
+//for deleting
+//master branch ku poi delete pananaum
+//git branch -d (branch name)     normal delete
+//git branch -D (branch name)     forcely delete
