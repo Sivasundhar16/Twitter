@@ -58,4 +58,6 @@ export const logout = (req, res) => {
 //1.15 hours
 //git branch = all branch
 //git checkout (branch name)   switch branch
-//
+
+//master branch ku poi
+// git merge (brach name ) wanted mergin branch name
