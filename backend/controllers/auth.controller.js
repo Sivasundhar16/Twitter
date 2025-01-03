@@ -71,8 +71,15 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = (req, res) => {
-  res.send("server is Logged Out");
+export const logout = async (req, res) => {
+  try {
+    //res.cookie("jwt-x", "", { maxAge: 0 });
+    res.clearCookie("jwt-x"); //other method res.cookie('jwt-x','',{maxAge:0}) cookie ah remove panalam or new empty cookie set panalam. ena panalum cookie remove aakirum
+    return res.status(200).json({ message: "Loggedout Successfully" });
+  } catch (error) {
+    console.log("Something went wrong", error);
+    res.status(404).json({ message: "Something went wrong" });
+  }
 };
 //git branch (name)                for creating new branch
 //git branch                       show all branch
