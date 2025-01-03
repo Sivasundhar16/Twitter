@@ -48,35 +48,14 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    if (!username || !password) {
-      return res.status(400).json({ message: "Enter All the fields" });
-    }
-
-    const existUser = await User.findOne({ username });
-    if (!existUser) {
-      return res.status(400).json({ message: "User Not found. Please Login" });
-    }
-
-    const ispassword = await bcrypt.compare(password, existUser.password);
-    if (!ispassword) {
-      return res.status(401).json({ message: "Wrong Password" });
-    }
-
-    try {
-      await generateToken(existUser._id, res);
-      res.status(200).json({ message: "Login successfully" });
-    } catch (error) {
-      console.log(error);
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
+export const login = (req, res) => {
+  res.send("server is login");
 };
 
 export const logout = (req, res) => {
-  res.send("server is logout");
+  res.send("server is Logged Out");
 };
+//1.15 hours
+//git branch = all branch
+//git checkout (branch name)   switch branch
+//
