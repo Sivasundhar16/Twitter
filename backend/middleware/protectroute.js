@@ -1,13 +1,21 @@
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
-export const protectroute = async (req, res, next) => {
-  console.log("Request cookies:", req.cookies); // Debug cookies
+//  const token = await jwt.sign({ userId }, process.env.SECRET_KEY, {
+//     expiresIn: "30d",
+//   });
 
+//   res.cookie("jwt-x", token, {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+//   });
+//user.findOne ({}) ithu ulla irukura argrment la first field : value. es6 la field and value same ah irukurathu naala name na verum name matum tharom . but actual ah {name:name } nu irukanum
+// {_id:user.id} ithu taan correct format
+export const protectroute = async (req, res, next) => {
   try {
-    const { "jwt-x": jwtToken } = req.cookies; // Retrieve the token
+    const { "jwt-x": jwtToken } = req.cookies; // cookies ulla irunthu token ah thaniya edikanum.token la userid and secret key irukum . atha vachu check pananaum
     if (!jwtToken) {
-      console.log("Token not found in cookies");
       return res.status(400).json({ message: "Token not found" });
     }
 
@@ -24,7 +32,6 @@ export const protectroute = async (req, res, next) => {
     }
 
     req.user = user;
-    console.log("Authenticated User:", user);
     next();
   } catch (error) {
     console.error("Error in protectRoute middleware:", error.message);
