@@ -81,6 +81,19 @@ export const logout = async (req, res) => {
     res.status(404).json({ message: "Something went wrong" });
   }
 };
+
+export const profile = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(400).json({ message: "User not avialable" });
+    }
+    res.status(200).json(req.user);
+  } catch (error) {
+    console.log(error);
+    res.json({ message: "Something went wrong" });
+  }
+};
+
 //git branch (name)                for creating new branch
 //git branch                       show all branch
 //git checkout (branch name)       switch branch
@@ -92,3 +105,4 @@ export const logout = async (req, res) => {
 //master branch ku poi delete pananaum
 //git branch -d (branch name)     normal delete
 //git branch -D (branch name)     forcely delete
+//1:36
