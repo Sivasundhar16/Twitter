@@ -3,6 +3,7 @@ import cors from "cors";
 import connectDb from "./db/connectdb.js";
 import dotenv from "dotenv";
 import authroute from "../backend/routes/auth.route.js";
+import userroute from "../backend/routes/user.route.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -15,7 +16,7 @@ app.use(cookieParser());
 const PORT = process.env.PORT || 5000;
 
 app.use("/auth", authroute);
-
+app.use("/user", userroute);
 const connection = async () => {
   try {
     await connectDb();
