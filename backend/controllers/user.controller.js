@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import Notification from "../models/notification.model.js";
 
 export const getprofile = async (req, res) => {
   try {
@@ -62,9 +63,27 @@ export const followUnfollow = async (req, res) => {
       res.status(200).json({ message: "You followed successfully" });
 
       //notification send pannanum//////$$$$$$$4
+
+      const newNotification = new Notification({
+        type: "follow",
+        from: req.user._id,
+        to: usertoModidfy._id, //inga direct ah id uhm kudukalam
+      });
+      await newNotification.save();
     }
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "server error" });
+  }
+};
+
+export const suggestedUser = (req, res) => {
+  try {
+    const userId = req.user._id;
+    const userfollwedbyme 
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message:'Error in suggested User'})
+    
   }
 };
