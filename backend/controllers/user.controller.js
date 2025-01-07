@@ -80,7 +80,7 @@ export const followUnfollow = async (req, res) => {
 export const suggestedUser = (req, res) => {
   try {
     const userId = req.user._id;
-    const userfollwedbyme 
+    // const userfollwedbyme 
   } catch (error) {
     console.log(error);
     res.status(500).json({message:'Error in suggested User'})
