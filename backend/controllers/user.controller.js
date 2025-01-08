@@ -77,13 +77,36 @@ export const followUnfollow = async (req, res) => {
   }
 };
 
-export const suggestedUser = (req, res) => {
+export const suggestedUser = async (req, res) => {
   try {
     const userId = req.user._id;
-    // const userfollwedbyme 
+
+    // Get the logged-in user's data
+    const userfollwedbyme = await User.findById(userId).select("-password");
+
+    // Fetch 10 random users excluding the logged-in user
+    const users = await User.aggregate([
+      { $match: { _id: { $ne: userId } } },
+      { $sample: { size: 10 } },
+    ]);
+
+    // Filter users not followed by the logged-in user
+    const following = userfollwedbyme.following || [];
+    const filteredUser = users.filter((user) => !following.includes(user._id));
+
+    // Pick the first 4 suggested users and remove passwords
+    const suggestedUser = filteredUser.slice(0, 4).map((user) => ({
+      ...user,
+      password: null, // Safely nullify password
+    }));
+
+    if (suggestedUser.length === 0) {
+      return res.status(200).json({ message: "No suggested users found" });
+    }
+
+    res.status(200).json(suggestedUser);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({message:'Error in suggested User'})
-    
+    console.error(error);
+    res.status(500).json({ message: "Error in suggested User" });
   }
 };

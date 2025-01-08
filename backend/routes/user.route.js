@@ -8,6 +8,7 @@ import {
 
 const router = Router();
 
+// router.get('/all',findmany)
 router.get("/profile/:username", protectroute, getprofile);
 router.post("/follow/:id", protectroute, followUnfollow);
 router.get("/suggested", protectroute, suggestedUser);
