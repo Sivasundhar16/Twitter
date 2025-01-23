@@ -84,17 +84,17 @@ export const suggestedUser = async (req, res) => {
     const userId = req.user._id;
 
     // Get the logged-in user's data
-    const userfollwedbyme = await User.findById(userId).select("-password");
+    const userfollwedbyme = await User.findById(userId).select("-password"); //getting logged user details without password
 
     // Fetch 10 random users excluding the logged-in user
     const users = await User.aggregate([
-      { $match: { _id: { $ne: userId } } }, //document la irukura detais la intha condition ah satisfy panura document ah thavara ellem varum
+      { $match: { _id: { $ne: userId } } }, //document la irukura detais la intha condition ah satisfy panura document ah thavara ellem varum(login la irukura user ah thavala ellem varum)
       { $sample: { size: 10 } },
     ]);
 
     // Filter users not followed by the logged-in user
     const following = userfollwedbyme.following || [];
-    const filteredUser = users.filter((user) => !following.includes(user._id));
+    const filteredUser = users.filter((user) => !following.includes(user._id)); //ena follow panuravanga laam true ah varuvanga. but follow panathavangala eduka munadi ! iruku
 
     // Pick the first 4 suggested users and remove passwords
     const suggestedUser = filteredUser.slice(0, 4).map((user) => ({
