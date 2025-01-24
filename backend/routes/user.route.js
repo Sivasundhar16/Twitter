@@ -12,6 +12,6 @@ const router = Router();
 router.get("/profile/:username", protectroute, getprofile);
 router.post("/follow/:id", protectroute, followUnfollow);
 router.get("/suggested", protectroute, suggestedUser);
-// router.post("/update", protectroute, updateUser);
+router.post("/update", protectroute, updateUser);
 
 export default router;

@@ -96,6 +96,8 @@ export const suggestedUser = async (req, res) => {
     const following = userfollwedbyme.following || [];
     const filteredUser = users.filter((user) => !following.includes(user._id)); //ena follow panuravanga laam true ah varuvanga. but follow panathavangala eduka munadi ! iruku
 
+    // console.log(filteredUser);
+
     // Pick the first 4 suggested users and remove passwords
     const suggestedUser = filteredUser.slice(0, 4).map((user) => ({
       ...user,
@@ -116,7 +118,7 @@ export const suggestedUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const userId = req.user._id;
-    const user = await User.findById({ _id: userId });
+    let user = await User.findById({ _id: userId });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -130,10 +132,15 @@ export const updateUser = async (req, res) => {
       newPassword,
       bio,
       link,
+      profileImg,
+      coverImg,
     } = req.body;
-    const { profileImg, coverImg } = req.body;
+    // const { profileImg, coverImg } = req.body;
 
-    if (!newPassword || !currentPassword) {
+    if (
+      (!newPassword && currentPassword) ||
+      (!currentPassword && newPassword)
+    ) {
       return res.status(400).json({ message: "Provide all password Field" });
     }
 
@@ -154,15 +161,40 @@ export const updateUser = async (req, res) => {
       user.password = await bcrypt.hash(newPassword, salt);
     }
 
-    if (profileImg) {
-      const uploadedResponse = await cloudinary.uploader.upload(profileImg);
-      profileImg = uploadedResponse.secure_url;
-    }
+    // if (profileImg) {
+    //   //https://res.cloudinary.com/dcp7ypbt/image/upload/v172681/cld-sample-5.jpg
+    //   //  namaku last ah irukura cld-sample-5 matum taan venum . so atha thaniya eduka ipudi panurom
+    //   if (user.profileImg) {
+    //     await cloudinary.uploader.destroy(
+    //       user.profileImg.split("/").pop().split(".")[0]
+    //     );
+    //   }
+    //   const uploadedResponse = await cloudinary.uploader.upload(profileImg);
+    //   profileImg = uploadedResponse.secure_url;
+    // }
 
-    if (coverImg) {
-      const uploadedResponse = await cloudinary.uploader.upload(coverImg);
-      coverImg = uploadedResponse.secure_url;
-    }
+    // if (coverImg) {
+    //   if (user.coverImg) {
+    //     await cloudinary.uploader.destroy(
+    //       user.coverImg.split("/").pop().split(".")[0]
+    //     );
+    //   }
+    //   const uploadedResponse = await cloudinary.uploader.upload(coverImg);
+    //   coverImg = uploadedResponse.secure_url;
+    // }
+
+    user.fullName = fullName || user.fullName;
+    user.email = email || user.email;
+    user.username = username || user.username;
+    user.bio = bio || user.bio;
+    // user.profileImg = profileImg || user.profileImg;
+    // user.coverImg = coverImg || user.coverImg;
+    user.link = link || user.link;
+
+    user = await user.save();
+    user.password = null;
+    //inga response kaka password ah null ah canghe panurom.so mongodb database ah affect panathu. save panna taan affect pannum
+    return res.status(200).json(user);
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Server Error in update user" });
