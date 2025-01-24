@@ -7,7 +7,7 @@ const postSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    test: {
+    text: {
       type: String,
     },
     img: {
@@ -36,5 +36,5 @@ const postSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Post = mongoose.model("Post", postSchema);
+const Post = mongoose.model("Posts", postSchema);
 export default Post;
