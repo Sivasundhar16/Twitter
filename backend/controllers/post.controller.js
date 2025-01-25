@@ -1,3 +1,4 @@
+import Notification from "../models/notification.model.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
 import cloudinary from "cloudinary";
@@ -64,4 +65,68 @@ export const deletePost = async (req, res) => {
     res.status(500).json({ error: "Internal server Error" });
   }
 };
-// export const updatePost = async () => {};
+export const commentPost = async (req, res) => {
+  try {
+    const { text } = req.body;
+    const postId = req.params.id;
+    const userId = req.user._id;
+
+    if (!text) {
+      return res.status(400).json({ message: "Text is requird for comment " });
+    }
+
+    const post = await Post.findById({ _id: postId });
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const comment = {
+      user: userId,
+      text: text,
+    };
+
+    post.comments.push(comment);
+    await post.save();
+
+    res.status(200).json(post);
+  } catch (error) {
+    console.log(`Error in comment Post ${error.message}`);
+    res.status(500).json({ error: "Internal server Error" });
+  }
+};
+export const likeUnlike = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { id: postId } = req.params;
+
+    const post = await Post.findById({ _id: postId });
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const userLikedPost = post.likes.includes(userId);
+    //user already like poturuntha unlike pannanum. podalana like pananum
+    if (userLikedPost) {
+      //unlike
+      await Post.findByIdAndUpdate(
+        { _id: postId },
+        { $pull: { likes: userId } }
+      );
+      return res.status(200).json({ message: "Post unliked successfully" });
+    } else {
+      //like
+      post.likes.push(userId);
+      await post.save();
+      const notification = new Notification({
+        from: userId,
+        to: post.user,
+        type: "like",
+      });
+      await notification.save();
+      return res.status(200).json({ message: "You liked the post" });
+    }
+  } catch (error) {
+    console.log(`Error in like Post ${error.message}`);
+    return res.status(500).json({ error: "Internal server Error" });
+  }
+};
