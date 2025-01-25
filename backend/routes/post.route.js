@@ -6,6 +6,7 @@ import {
   commentPost,
   likeUnlike,
   getallPost,
+  getLikedPost,
 } from "../controllers/post.controller.js";
 
 const router = Router();
@@ -15,5 +16,6 @@ router.post("/create", protectroute, createPost);
 router.delete("/:id", protectroute, deletePost);
 router.post("/comment/:id", protectroute, commentPost);
 router.post("/like/:id", protectroute, likeUnlike);
+router.get("/likes/:id", protectroute, getLikedPost);
 
 export default router;

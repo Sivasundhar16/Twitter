@@ -112,10 +112,15 @@ export const likeUnlike = async (req, res) => {
         { _id: postId },
         { $pull: { likes: userId } }
       );
+      await User.updateOne({ _id: userId }, { $pull: { likedPost: postId } });
       return res.status(200).json({ message: "Post unliked successfully" });
     } else {
       //like
       post.likes.push(userId);
+      await User.findByIdAndUpdate(
+        { _id: userId },
+        { $push: { likedPost: postId } }
+      );
       await post.save();
       const notification = new Notification({
         from: userId,
@@ -133,13 +138,63 @@ export const likeUnlike = async (req, res) => {
 
 export const getallPost = async (req, res) => {
   try {
-    const posts = await Post.find().sort({ createdAt: -1 });
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: [
+          "-password",
+          "-email",
+          "-following",
+          "-followers",
+          "-bio",
+          "-link",
+        ],
+      });
     if (posts.length === 0) {
       return res.status(200).json([]);
     }
     res.status(200).json(posts);
   } catch (error) {
     console.log(`Error in get Post ${error.message}`);
+    return res.status(500).json({ error: "Internal server Error" });
+  }
+};
+
+export const getLikedPost = async (req, res) => {
+  try {
+    // const { userId } = req.user;
+    const { id: userId } = req.params;
+    const user = await User.findById({ _id: userId });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    //particular user like panna post ah inga edukurom
+    const likedPosts = await Post.find({
+      _id: { $in: user.likedPost },
+    })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: [
+          "-password",
+          "-email",
+          "-following",
+          "-followers",
+          "-bio",
+          "-link",
+        ],
+      });
+    return res.status(200).json(likedPosts);
+  } catch (error) {
+    console.log(`Error in get all post ${error.message}`);
     return res.status(500).json({ error: "Internal server Error" });
   }
 };
