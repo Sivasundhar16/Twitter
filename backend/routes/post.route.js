@@ -5,10 +5,12 @@ import {
   deletePost,
   commentPost,
   likeUnlike,
+  getallPost,
 } from "../controllers/post.controller.js";
 
 const router = Router();
 
+router.get("/all", protectroute, getallPost);
 router.post("/create", protectroute, createPost);
 router.delete("/:id", protectroute, deletePost);
 router.post("/comment/:id", protectroute, commentPost);
