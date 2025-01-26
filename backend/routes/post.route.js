@@ -7,11 +7,13 @@ import {
   likeUnlike,
   getallPost,
   getLikedPost,
+  getFollowingPost,
 } from "../controllers/post.controller.js";
 
 const router = Router();
 
 router.get("/all", protectroute, getallPost);
+router.get("/following", protectroute, getFollowingPost);
 router.post("/create", protectroute, createPost);
 router.delete("/:id", protectroute, deletePost);
 router.post("/comment/:id", protectroute, commentPost);
