@@ -8,6 +8,7 @@ import {
   getallPost,
   getLikedPost,
   getFollowingPost,
+  getUserPost,
 } from "../controllers/post.controller.js";
 
 const router = Router();
@@ -19,5 +20,6 @@ router.delete("/:id", protectroute, deletePost);
 router.post("/comment/:id", protectroute, commentPost);
 router.post("/like/:id", protectroute, likeUnlike);
 router.get("/likes/:id", protectroute, getLikedPost);
+router.get("/user/:username", protectroute, getUserPost);
 
 export default router;
