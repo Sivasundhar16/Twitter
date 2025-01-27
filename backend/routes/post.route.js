@@ -16,10 +16,10 @@ const router = Router();
 router.get("/all", protectroute, getallPost);
 router.get("/following", protectroute, getFollowingPost);
 router.post("/create", protectroute, createPost);
+router.get("/user/:username", protectroute, getUserPost);
 router.delete("/:id", protectroute, deletePost);
 router.post("/comment/:id", protectroute, commentPost);
 router.post("/like/:id", protectroute, likeUnlike);
 router.get("/likes/:id", protectroute, getLikedPost);
-router.get("/user/:username", protectroute, getUserPost);
 
 export default router;

@@ -6,6 +6,7 @@ import authroute from "../backend/routes/auth.route.js";
 import userroute from "../backend/routes/user.route.js";
 import cookieParser from "cookie-parser";
 import postroute from "../backend/routes/post.route.js";
+import notificationroute from "../backend/routes/notification.route.js";
 import cloudinary from "cloudinary";
 
 dotenv.config();
@@ -25,6 +26,7 @@ const PORT = process.env.PORT || 5000;
 app.use("/auth", authroute);
 app.use("/user", userroute);
 app.use("/post", postroute);
+app.use("/notification", notificationroute);
 
 const connection = async () => {
   try {

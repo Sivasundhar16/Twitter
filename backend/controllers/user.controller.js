@@ -9,7 +9,7 @@ export const getprofile = async (req, res) => {
     const existUser = await User.findOne({ username });
 
     if (!existUser) {
-      res.status(400).json({ error: "User not found" });
+      res.status(404).json({ error: "User not found" });
     }
     res.status(200).json({ existUser });
   } catch (error) {
@@ -33,7 +33,7 @@ export const followUnfollow = async (req, res) => {
     }
 
     if (!usertoModidfy || !currentUser) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const isFollowing = currentUser.following.includes(id);

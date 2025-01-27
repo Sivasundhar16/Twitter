@@ -53,7 +53,7 @@ export const login = async (req, res) => {
     const { username, password } = req.body;
     const existUser = await User.findOne({ username });
     if (!existUser) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
     const passwordCorrect = await bcrypt.compare(password, existUser.password);
     if (!passwordCorrect) {
@@ -85,7 +85,7 @@ export const logout = async (req, res) => {
 export const profile = async (req, res) => {
   try {
     if (!req.user) {
-      return res.status(400).json({ message: "User not avialable" });
+      return res.status(404).json({ message: "User not avialable" });
     }
     res.status(200).json(req.user);
   } catch (error) {
