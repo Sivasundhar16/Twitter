@@ -1,4 +1,14 @@
 @import "tailwindcss";
-@plugin "daisyui" {
-  themes: halloween --default;
+@plugin "daisyui";
+
+/* Customize the 'black' theme */
+@plugin "daisyui/theme" {
+  name: "black"; /* same as the built-in theme */
+  default: false; /* keep false if you don't want it to be default */
+
+  --color-primary: rgb(29, 155, 240);
+  --color-primary-content: #ffffff;
+
+  --color-secondary: rgb(24, 24, 24);
+  --color-secondary-content: #ffffff;
 }
