@@ -1,5 +1,5 @@
 const App = () => {
-  return <div>Sivasundhar </div>;
+  return <div>Twitter clone</div>;
 };
 
 export default App;
